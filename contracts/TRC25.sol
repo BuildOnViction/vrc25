@@ -243,6 +243,9 @@ abstract contract TRC25 is ITRC25, IERC165 {
         return interfaceId == type(ITRC25).interfaceId;
     }
 
+    /**
+     * @notice Calculate fee needed to transfer `amount` of tokens.
+     */
     function _estimateFee(uint256 value) internal view virtual returns (uint256);
 
     /**

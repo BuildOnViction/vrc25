@@ -46,7 +46,13 @@ abstract contract TRC25Upgradable is ITRC25, IERC165 {
     /**
      * @notice Calculate fee needed to transfer `amount` of tokens.
      */
-    function estimateFee(uint256 value) public view override virtual returns (uint256);
+    function estimateFee(uint256 value) public view override returns (uint256) {
+        if (address(msg.sender).isContract()) {
+            return 0;
+        } else {
+            return _estimateFee(value);
+        }
+    }
 
     /**
      * @dev Throws if called by any account other than the owner.
@@ -226,7 +232,8 @@ abstract contract TRC25Upgradable is ITRC25, IERC165 {
      * Can only be called by the current owner.
      */
     function setMinFee(uint256 fee) public onlyOwner {
-        _setMinFee(fee);
+        _minFee = fee;
+        emit FeeUpdated(fee);
     }
 
     /**
@@ -240,10 +247,10 @@ abstract contract TRC25Upgradable is ITRC25, IERC165 {
         return interfaceId == type(ITRC25).interfaceId;
     }
 
-    function _setMinFee(uint256 newMinFee) internal {
-        _minFee = newMinFee;
-        emit FeeUpdated(newMinFee);
-    }
+    /**
+     * @notice Calculate fee needed to transfer `amount` of tokens.
+     */
+    function _estimateFee(uint256 value) internal view virtual returns (uint256);
 
     /**
      * @dev Transfer token for a specified addresses

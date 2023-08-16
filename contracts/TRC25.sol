@@ -8,7 +8,7 @@ import "./libraries/Address.sol";
 import "./libraries/SafeMath.sol";
 
 /**
- * @title Base VRC25 implementation
+ * @title Base TRC25 implementation
  * @author Terry (huybd@coin98.finance)
  * @notice TRC25 implementation for opt-in to gas sponsor program. This replace Ownable from OpenZeppelin as well.
  */
@@ -42,13 +42,19 @@ abstract contract TRC25 is ITRC25, IERC165 {
     /**
      * @notice Calculate fee needed to transfer `amount` of tokens.
      */
-    function estimateFee(uint256 value) public view override virtual returns (uint256);
+    function estimateFee(uint256 value) public view override returns (uint256) {
+        if (address(msg.sender).isContract()) {
+            return 0;
+        } else {
+            return _estimateFee(value);
+        }
+    }
 
     /**
      * @dev Throws if called by any account other than the owner.
      */
     modifier onlyOwner() {
-        require(_owner == msg.sender, "VRC25: caller is not the owner");
+        require(_owner == msg.sender, "TRC25: caller is not the owner");
         _;
     }
 
@@ -142,7 +148,7 @@ abstract contract TRC25 is ITRC25, IERC165 {
         uint256 fee = estimateFee(0);
         _chargeFeeFrom(msg.sender, address(this), fee);
 
-        require(spender != address(0), "VRC25: approve to the zero address");
+        require(spender != address(0), "TRC25: approve to the zero address");
 
         _allowances[msg.sender][spender] = amount;
 
@@ -163,7 +169,7 @@ abstract contract TRC25 is ITRC25, IERC165 {
         uint256 fee = estimateFee(amount);
         _chargeFeeFrom(sender, recipient, fee);
 
-        require(_allowances[sender][msg.sender] >= amount.add(fee), "VRC25: amount exeeds allowance");
+        require(_allowances[sender][msg.sender] >= amount.add(fee), "TRC25: amount exeeds allowance");
 
         _allowances[sender][msg.sender] = _allowances[sender][msg.sender].sub(amount).sub(fee);
         _transfer(sender, recipient, amount);
@@ -199,7 +205,7 @@ abstract contract TRC25 is ITRC25, IERC165 {
      * Can only be called by the newly transfered owner.
      */
     function acceptOwnership() public {
-        require(msg.sender == _newOwner, "VRC25: only new owner can accept ownership");
+        require(msg.sender == _newOwner, "TRC25: only new owner can accept ownership");
         address oldOwner = _owner;
         _owner = _newOwner;
         _newOwner = address(0);
@@ -212,7 +218,7 @@ abstract contract TRC25 is ITRC25, IERC165 {
      * Can only be called by the current owner.
      */
     function transferOwnership(address newOwner) public onlyOwner {
-        require(newOwner != address(0), "VRC25: new owner is the zero address");
+        require(newOwner != address(0), "TRC25: new owner is the zero address");
         _newOwner = newOwner;
     }
 
@@ -237,6 +243,8 @@ abstract contract TRC25 is ITRC25, IERC165 {
         return interfaceId == type(ITRC25).interfaceId;
     }
 
+    function _estimateFee(uint256 value) internal view virtual returns (uint256);
+
     /**
      * @dev Transfer token for a specified addresses
      * @param from The address to transfer from.
@@ -244,9 +252,9 @@ abstract contract TRC25 is ITRC25, IERC165 {
      * @param amount The amount to be transferred.
      */
     function _transfer(address from, address to, uint256 amount) internal {
-        require(from != address(0), "VRC25: transfer from the zero address");
-        require(to != address(0), "VRC25: transfer to the zero address");
-        require(amount <= _balances[from], "VRC25: insuffient balance");
+        require(from != address(0), "TRC25: transfer from the zero address");
+        require(to != address(0), "TRC25: transfer to the zero address");
+        require(amount <= _balances[from], "TRC25: insuffient balance");
         _balances[from] = _balances[from] - amount;
         _balances[to] = _balances[to] + amount;
         emit Transfer(from, to, amount);
@@ -276,7 +284,7 @@ abstract contract TRC25 is ITRC25, IERC165 {
      * @param amount The amount that will be created.
      */
     function _mint(address to, uint256 amount) internal {
-        require(to != address(0), "VRC25: mint to the zero address");
+        require(to != address(0), "TRC25: mint to the zero address");
         _totalSupply = _totalSupply + amount;
         _balances[to] = _balances[to] + amount;
         emit Transfer(address(0), to, amount);
@@ -290,8 +298,8 @@ abstract contract TRC25 is ITRC25, IERC165 {
      * @param amount The amount that will be burned.
      */
     function _burn(address from, uint256 amount) internal {
-        require(from != address(0), "VRC25: burn from the zero address");
-        require(amount <= _balances[from], "VRC25: insuffient balance");
+        require(from != address(0), "TRC25: burn from the zero address");
+        require(amount <= _balances[from], "TRC25: insuffient balance");
         _totalSupply = _totalSupply - amount;
         _balances[from] = _balances[from] - amount;
         emit Transfer(from, address(0), amount);

@@ -34,7 +34,7 @@ abstract contract TRC25Upgradable is ITRC25, IERC165 {
 
 
     /**
-     * @notice Init TRC25 contract, MUST BE call only 1 one when init smart contract.
+     * @notice Init TRC25 contract, MUST BE call only 1 one time when init smart contract.
      */
     function __TRC25_init(string memory name, string memory symbol, uint8 decimals_) internal {
         _name = name;

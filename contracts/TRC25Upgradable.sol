@@ -113,7 +113,7 @@ abstract contract TRC25Upgradable is ITRC25, IERC165 {
     }
 
     /**
-     * @dev    The amount fee that will be lost when transferring.
+     * @dev The amount fee that will be lost when transferring.
      */
     function minFee() public view returns (uint256) {
         return _minFee;
@@ -227,11 +227,11 @@ abstract contract TRC25Upgradable is ITRC25, IERC165 {
     }
 
     /**
-     * @notice Internal function for set minimum fee for each transaction
+     * @notice Set minimum fee for each transaction
      *
      * Can only be called by the current owner.
      */
-    function setMinFee(uint256 fee) public onlyOwner {
+    function setFee(uint256 fee) public onlyOwner {
         _minFee = fee;
         emit FeeUpdated(fee);
     }

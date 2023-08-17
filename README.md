@@ -1,4 +1,4 @@
-# Coin98 Smart Contract Template for EVM Network
+# TRC25
 
 ## Setup .env
 ```env

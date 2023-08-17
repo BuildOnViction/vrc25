@@ -102,6 +102,20 @@ abstract contract TRC25 is ITRC25, IERC165 {
     }
 
     /**
+     * @notice Name of token
+     */
+    function name() public view returns (string memory) {
+        return _name;
+    }
+
+    /**
+     * @notice Symbol of token
+     */
+    function symbol() public view returns (string memory) {
+        return _symbol;
+    }
+
+    /**
      * @notice Owner of the token
      */
     function issuer() public view override returns (address) {
@@ -239,7 +253,7 @@ abstract contract TRC25 is ITRC25, IERC165 {
      * to learn more about how these ids are created.
      *
      */
-    function supportsInterface(bytes4 interfaceId) external pure override returns (bool) {
+    function supportsInterface(bytes4 interfaceId) public pure override virtual returns (bool) {
         return interfaceId == type(ITRC25).interfaceId;
     }
 

@@ -44,17 +44,6 @@ abstract contract TRC25Upgradable is ITRC25, IERC165 {
     }
 
     /**
-     * @notice Calculate fee needed to transfer `amount` of tokens.
-     */
-    function estimateFee(uint256 value) public view override returns (uint256) {
-        if (address(msg.sender).isContract()) {
-            return 0;
-        } else {
-            return _estimateFee(value);
-        }
-    }
-
-    /**
      * @dev Throws if called by any account other than the owner.
      */
     modifier onlyOwner() {
@@ -131,6 +120,17 @@ abstract contract TRC25Upgradable is ITRC25, IERC165 {
      */
     function minFee() public view returns (uint256) {
         return _minFee;
+    }
+
+    /**
+     * @notice Calculate fee needed to transfer `amount` of tokens.
+     */
+    function estimateFee(uint256 value) public view override returns (uint256) {
+        if (address(msg.sender).isContract()) {
+            return 0;
+        } else {
+            return _estimateFee(value);
+        }
     }
 
     /**

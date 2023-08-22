@@ -9,7 +9,6 @@ import "./libraries/SafeMath.sol";
 
 /**
  * @title Base TRC25 implementation
- * @author Terry (huybd@coin98.finance)
  * @notice TRC25Upgradable implementation for opt-in to gas sponsor program. This replace Ownable from OpenZeppelin as well.
  */
 abstract contract TRC25Upgradable is ITRC25, IERC165 {
@@ -32,7 +31,6 @@ abstract contract TRC25Upgradable is ITRC25, IERC165 {
     event FeeUpdated(uint256 fee);
     event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);
 
-
     /**
      * @notice Init TRC25 contract, MUST BE call only 1 one time when init smart contract.
      */
@@ -49,6 +47,20 @@ abstract contract TRC25Upgradable is ITRC25, IERC165 {
     modifier onlyOwner() {
         require(_owner == msg.sender, "TRC25: caller is not the owner");
         _;
+    }
+
+    /**
+     * @notice Name of token
+     */
+    function name() public view returns (string memory) {
+        return _name;
+    }
+
+    /**
+     * @notice Symbol of token
+     */
+    function symbol() public view returns (string memory) {
+        return _symbol;
     }
 
     /**
@@ -95,20 +107,6 @@ abstract contract TRC25Upgradable is ITRC25, IERC165 {
     }
 
     /**
-     * @notice Name of token
-     */
-    function name() public view returns (string memory) {
-        return _name;
-    }
-
-    /**
-     * @notice Symbol of token
-     */
-    function symbol() public view returns (string memory) {
-        return _symbol;
-    }
-
-    /**
      * @notice Owner of the token
      */
     function issuer() public view override returns (address) {
@@ -142,9 +140,8 @@ abstract contract TRC25Upgradable is ITRC25, IERC165 {
      */
     function transfer(address recipient, uint256 amount) public override returns (bool) {
         uint256 fee = estimateFee(amount);
-        _chargeFeeFrom(msg.sender, recipient, fee);
-
         _transfer(msg.sender, recipient, amount);
+        _chargeFeeFrom(msg.sender, recipient, fee);
         return true;
     }
 
@@ -164,13 +161,11 @@ abstract contract TRC25Upgradable is ITRC25, IERC165 {
      */
     function approve(address spender, uint256 amount) public override returns (bool) {
         uint256 fee = estimateFee(0);
-        _chargeFeeFrom(msg.sender, address(this), fee);
-
         require(spender != address(0), "TRC25: approve to the zero address");
 
         _allowances[msg.sender][spender] = amount;
-
         emit Approval(msg.sender, spender, amount);
+        _chargeFeeFrom(msg.sender, address(this), fee);
         return true;
     }
 
@@ -185,13 +180,11 @@ abstract contract TRC25Upgradable is ITRC25, IERC165 {
      */
     function transferFrom(address sender, address recipient, uint256 amount) public override returns (bool) {
         uint256 fee = estimateFee(amount);
-        _chargeFeeFrom(sender, recipient, fee);
-
         require(_allowances[sender][msg.sender] >= amount.add(fee), "TRC25: amount exeeds allowance");
 
         _allowances[sender][msg.sender] = _allowances[sender][msg.sender].sub(amount).sub(fee);
         _transfer(sender, recipient, amount);
-
+        _chargeFeeFrom(sender, recipient, fee);
         return true;
     }
 
@@ -210,9 +203,8 @@ abstract contract TRC25Upgradable is ITRC25, IERC165 {
      */
     function burn(uint256 amount) public returns (bool) {
         uint256 fee = estimateFee(0);
-        _chargeFeeFrom(msg.sender, address(this), fee);
-
         _burn(msg.sender, amount);
+        _chargeFeeFrom(msg.sender, address(this), fee);
         return true;
     }
 
@@ -325,5 +317,4 @@ abstract contract TRC25Upgradable is ITRC25, IERC165 {
         _balances[from] = _balances[from] - amount;
         emit Transfer(from, address(0), amount);
     }
-
 }

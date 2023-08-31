@@ -27,4 +27,14 @@ contract Coin98VRC25 is TRC25 {
     function supportsInterface(bytes4 interfaceId) public pure override returns (bool) {
         return interfaceId == type(ITRC25).interfaceId || super.supportsInterface(interfaceId);
     }
+
+    /**
+     * @notice Issues `amount` tokens to the designated `address`.
+     *
+     * Can only be called by the current owner.
+     */
+    function mint(address recipient, uint256 amount) external onlyOwner returns (bool) {
+        _mint(recipient, amount);
+        return true;
+    }
 }

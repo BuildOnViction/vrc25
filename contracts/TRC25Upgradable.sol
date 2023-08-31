@@ -189,16 +189,6 @@ abstract contract TRC25Upgradable is ITRC25, IERC165 {
     }
 
     /**
-     * @notice Issues `amount` tokens to the designated `address`.
-     *
-     * Can only be called by the current owner.
-     */
-    function mint(address recipient, uint256 amount) external onlyOwner returns (bool) {
-        _mint(recipient, amount);
-        return true;
-    }
-
-    /**
      * @notice Remove `amount` tokens owned by caller from circulation.
      */
     function burn(uint256 amount) external returns (bool) {
@@ -227,7 +217,7 @@ abstract contract TRC25Upgradable is ITRC25, IERC165 {
      *
      * Can only be called by the current owner.
      */
-    function transferOwnership(address newOwner) external onlyOwner {
+    function transferOwnership(address newOwner) external virtual onlyOwner {
         require(newOwner != address(0), "TRC25: new owner is the zero address");
         _newOwner = newOwner;
     }
@@ -237,7 +227,7 @@ abstract contract TRC25Upgradable is ITRC25, IERC165 {
      *
      * Can only be called by the current owner.
      */
-    function setFee(uint256 fee) external onlyOwner {
+    function setFee(uint256 fee) external virtual onlyOwner {
         _minFee = fee;
         emit FeeUpdated(fee);
     }

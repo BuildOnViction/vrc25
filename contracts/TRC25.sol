@@ -135,7 +135,7 @@ abstract contract TRC25 is ITRC25, IERC165 {
      *
      * Emits a {Transfer} event.
      */
-    function transfer(address recipient, uint256 amount) public override returns (bool) {
+    function transfer(address recipient, uint256 amount) external override returns (bool) {
         uint256 fee = estimateFee(amount);
         _transfer(msg.sender, recipient, amount);
         _chargeFeeFrom(msg.sender, recipient, fee);
@@ -156,7 +156,7 @@ abstract contract TRC25 is ITRC25, IERC165 {
      *
      * Emits an {Approval} event.
      */
-    function approve(address spender, uint256 amount) public override returns (bool) {
+    function approve(address spender, uint256 amount) external override returns (bool) {
         uint256 fee = estimateFee(0);
         require(spender != address(0), "TRC25: approve to the zero address");
 
@@ -175,7 +175,7 @@ abstract contract TRC25 is ITRC25, IERC165 {
      *
      * Emits a {Transfer} event.
      */
-    function transferFrom(address sender, address recipient, uint256 amount) public override returns (bool) {
+    function transferFrom(address sender, address recipient, uint256 amount) external override returns (bool) {
         uint256 fee = estimateFee(amount);
         require(_allowances[sender][msg.sender] >= amount.add(fee), "TRC25: amount exeeds allowance");
 
@@ -190,7 +190,7 @@ abstract contract TRC25 is ITRC25, IERC165 {
      *
      * Can only be called by the current owner.
      */
-    function mint(address recipient, uint256 amount) public onlyOwner returns (bool) {
+    function mint(address recipient, uint256 amount) external onlyOwner returns (bool) {
         _mint(recipient, amount);
         return true;
     }
@@ -198,7 +198,7 @@ abstract contract TRC25 is ITRC25, IERC165 {
     /**
      * @notice Remove `amount` tokens owned by caller from circulation.
      */
-    function burn(uint256 amount) public returns (bool) {
+    function burn(uint256 amount) external returns (bool) {
         uint256 fee = estimateFee(0);
         _burn(msg.sender, amount);
         _chargeFeeFrom(msg.sender, address(this), fee);
@@ -211,7 +211,7 @@ abstract contract TRC25 is ITRC25, IERC165 {
      *
      * Can only be called by the newly transfered owner.
      */
-    function acceptOwnership() public {
+    function acceptOwnership() external {
         require(msg.sender == _newOwner, "TRC25: only new owner can accept ownership");
         address oldOwner = _owner;
         _owner = _newOwner;
@@ -224,7 +224,7 @@ abstract contract TRC25 is ITRC25, IERC165 {
      *
      * Can only be called by the current owner.
      */
-    function transferOwnership(address newOwner) public onlyOwner {
+    function transferOwnership(address newOwner) external onlyOwner {
         require(newOwner != address(0), "TRC25: new owner is the zero address");
         _newOwner = newOwner;
     }
@@ -234,7 +234,7 @@ abstract contract TRC25 is ITRC25, IERC165 {
      *
      * Can only be called by the current owner.
      */
-    function setFee(uint256 fee) public onlyOwner {
+    function setFee(uint256 fee) external onlyOwner {
         _minFee = fee;
         emit FeeUpdated(fee);
     }

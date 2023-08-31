@@ -265,8 +265,8 @@ abstract contract TRC25 is ITRC25, IERC165 {
         require(from != address(0), "TRC25: transfer from the zero address");
         require(to != address(0), "TRC25: transfer to the zero address");
         require(amount <= _balances[from], "TRC25: insuffient balance");
-        _balances[from] = _balances[from] - amount;
-        _balances[to] = _balances[to] + amount;
+        _balances[from] = _balances[from].sub(amount);
+        _balances[to] = _balances[to].add(amount);
         emit Transfer(from, to, amount);
     }
 
@@ -295,8 +295,8 @@ abstract contract TRC25 is ITRC25, IERC165 {
      */
     function _mint(address to, uint256 amount) internal {
         require(to != address(0), "TRC25: mint to the zero address");
-        _totalSupply = _totalSupply + amount;
-        _balances[to] = _balances[to] + amount;
+        _totalSupply = _totalSupply.add(amount);
+        _balances[to] = _balances[to].add(amount);
         emit Transfer(address(0), to, amount);
     }
 
@@ -310,8 +310,8 @@ abstract contract TRC25 is ITRC25, IERC165 {
     function _burn(address from, uint256 amount) internal {
         require(from != address(0), "TRC25: burn from the zero address");
         require(amount <= _balances[from], "TRC25: insuffient balance");
-        _totalSupply = _totalSupply - amount;
-        _balances[from] = _balances[from] - amount;
+        _totalSupply = _totalSupply.sub(amount);
+        _balances[from] = _balances[from].sub(amount);
         emit Transfer(from, address(0), amount);
     }
 }

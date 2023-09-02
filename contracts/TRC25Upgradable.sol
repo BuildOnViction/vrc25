@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity >=0.7.0;
+pragma solidity >=0.6.2;
 
 import "./interfaces/ITRC25.sol";
 import "./interfaces/IERC165.sol";
@@ -239,7 +239,7 @@ abstract contract TRC25Upgradable is ITRC25, IERC165 {
      * to learn more about how these ids are created.
      *
      */
-    function supportsInterface(bytes4 interfaceId) public pure override virtual returns (bool) {
+    function supportsInterface(bytes4 interfaceId) public view override virtual returns (bool) {
         return interfaceId == type(ITRC25).interfaceId;
     }
 

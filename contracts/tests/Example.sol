@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity >=0.7.0;
+pragma solidity >=0.6.2;
 
 import "../TRC25.sol";
 
@@ -7,7 +7,7 @@ contract Coin98VRC25 is TRC25 {
     using Address for address;
     event Hello(address sender);
 
-    constructor() TRC25("Terry Fan Token", "TFT", 0) {
+    constructor() public TRC25("Example Fungible Token", "EFT", 0) {
     }
 
     /**
@@ -24,7 +24,7 @@ contract Coin98VRC25 is TRC25 {
         emit Hello(msg.sender);
     }
 
-    function supportsInterface(bytes4 interfaceId) public pure override returns (bool) {
+    function supportsInterface(bytes4 interfaceId) public view override returns (bool) {
         return interfaceId == type(ITRC25).interfaceId || super.supportsInterface(interfaceId);
     }
 

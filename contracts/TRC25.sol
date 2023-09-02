@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity >=0.7.0;
+pragma solidity >=0.6.2;
 
 import "./interfaces/ITRC25.sol";
 import "./interfaces/IERC165.sol";
@@ -31,7 +31,7 @@ abstract contract TRC25 is ITRC25, IERC165 {
     event FeeUpdated(uint256 fee);
     event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);
 
-    constructor(string memory name, string memory symbol, uint8 decimals_) {
+    constructor(string memory name, string memory symbol, uint8 decimals_) internal {
         _name = name;
         _symbol = symbol;
         _decimals = decimals_;
@@ -236,7 +236,7 @@ abstract contract TRC25 is ITRC25, IERC165 {
      * to learn more about how these ids are created.
      *
      */
-    function supportsInterface(bytes4 interfaceId) public pure override virtual returns (bool) {
+    function supportsInterface(bytes4 interfaceId) public view override virtual returns (bool) {
         return interfaceId == type(ITRC25).interfaceId;
     }
 

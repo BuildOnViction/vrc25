@@ -158,10 +158,7 @@ abstract contract TRC25 is ITRC25, IERC165 {
      */
     function approve(address spender, uint256 amount) external override returns (bool) {
         uint256 fee = estimateFee(0);
-        require(spender != address(0), "TRC25: approve to the zero address");
-
-        _allowances[msg.sender][spender] = amount;
-        emit Approval(msg.sender, spender, amount);
+        _approve(msg.sender, spender, amount);
         _chargeFeeFrom(msg.sender, address(this), fee);
         return true;
     }
@@ -258,6 +255,20 @@ abstract contract TRC25 is ITRC25, IERC165 {
         _balances[from] = _balances[from].sub(amount);
         _balances[to] = _balances[to].add(amount);
         emit Transfer(from, to, amount);
+    }
+
+    /**
+     * @dev Set allowance that spender can use from owner
+     * @param owner The address that authroize the allowance
+     * @param spender The address that can spend the allowance
+     * @param amount The amount that can be allowed
+     */
+    function _approve(address owner, address spender, uint256 amount) internal {
+        require(owner != address(0), "TRC25: approve from the zero address");
+        require(spender != address(0), "TRC25: approve to the zero address");
+
+        _allowances[owner][spender] = amount;
+        emit Approval(owner, spender, amount);
     }
 
     /**

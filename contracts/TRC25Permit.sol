@@ -32,14 +32,16 @@ abstract contract TRC25Permit is TRC25, EIP712, ITRC25Permit {
      * @dev See {IERC20Permit-permit}.
      */
     function permit(address owner, address spender, uint256 value, uint256 deadline, uint8 v, bytes32 r, bytes32 s) external override {
-        require(block.timestamp <= deadline, "VRC25: Permit expired");
+        require(block.timestamp <= deadline, "TRC25: Permit expired");
 
         bytes32 structHash = keccak256(abi.encode(PERMIT_TYPEHASH, owner, spender, value, _useNonce(owner), deadline));
         bytes32 hash = _hashTypedDataV4(structHash);
         address signer = ECDSA.recover(hash, v, r, s);
-        require(signer == owner, "VRC25: Invalid permit");
+        require(signer == owner, "TRC25: Invalid permit");
 
+        uint256 fee = estimateFee(0);
         _approve(owner, spender, value);
+        _chargeFeeFrom(owner, address(this), fee);
     }
 
     /**

@@ -1,13 +1,13 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.6.2;
 
-import "../TRC25.sol";
+import "../TRC25Permit.sol";
 
-contract Coin98VRC25 is TRC25 {
+contract SampleTRC25 is TRC25Permit {
     using Address for address;
     event Hello(address sender);
 
-    constructor() public TRC25("Example Fungible Token", "EFT", 0) {
+    constructor() public TRC25("Example Fungible Token", "EFT", 0) EIP712("TRC25Permit", "1") {
     }
 
     /**

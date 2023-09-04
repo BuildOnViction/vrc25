@@ -1,4 +1,4 @@
-# TRC25
+# TRC25 Specifications
 
 ## Setup .env
 ```env

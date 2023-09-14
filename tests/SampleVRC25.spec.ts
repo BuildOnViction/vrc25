@@ -2,7 +2,7 @@
 import hhe from 'hardhat';
 import { Signer, BigNumber } from 'ethers';
 import { expect } from 'chai';
-import { SampleTRC25 } from '../typechain-types';
+import { SampleVRC25 } from '../typechain-types';
 import { ZERO_ADDRESS } from '@coin98/solidity-support-library';
 import { ECDSASignature, EIP712Domain, EIP712TypeDefinition } from './EIP712';
 import { time } from '@nomicfoundation/hardhat-network-helpers';
@@ -14,7 +14,7 @@ describe('SampleVRC25 token', async function() {
   let senderAddress: string;
   let recipient: Signer;
   let recipientAddress: string;
-  let c98Token: SampleTRC25;
+  let c98Token: SampleVRC25;
   let minFee = hhe.ethers.utils.parseEther('1');
   let snapshot: any;
 
@@ -23,7 +23,7 @@ describe('SampleVRC25 token', async function() {
     ownerAddress = await owner.getAddress();
     senderAddress = await sender.getAddress();
     recipientAddress = await recipient.getAddress();
-    const tokenFactory = await hhe.ethers.getContractFactory('SampleTRC25');
+    const tokenFactory = await hhe.ethers.getContractFactory('SampleVRC25');
     c98Token = await tokenFactory.connect(owner).deploy();
     await c98Token.deployed();
   });
@@ -38,7 +38,7 @@ describe('SampleVRC25 token', async function() {
 
   it('cannot set fee without ownership', async function() {
     await expect(c98Token.connect(recipient).setFee(minFee))
-      .to.be.revertedWith('TRC25: caller is not the owner');
+      .to.be.revertedWith('VRC25: caller is not the owner');
   });
 
   it('check ownership', async function() {
@@ -54,7 +54,7 @@ describe('SampleVRC25 token', async function() {
 
   it('cannot transfer ownership without ownership', async function() {
     await expect(c98Token.connect(recipient).transferOwnership(recipientAddress))
-      .to.be.revertedWith('TRC25: caller is not the owner');
+      .to.be.revertedWith('VRC25: caller is not the owner');
   });
 
   it('should mint tokens', async function() {
@@ -67,7 +67,7 @@ describe('SampleVRC25 token', async function() {
 
   it('cannot mint without ownership', async function() {
     await expect(c98Token.connect(recipient).mint(ownerAddress, hhe.ethers.utils.parseEther('1')))
-      .to.be.revertedWith('TRC25: caller is not the owner');
+      .to.be.revertedWith('VRC25: caller is not the owner');
   });
 
   it('should burn tokens without fee', async function() {
@@ -84,7 +84,7 @@ describe('SampleVRC25 token', async function() {
     await c98Token.connect(owner).mint(senderAddress, hhe.ethers.utils.parseEther('1000'));
     const amount = hhe.ethers.utils.parseEther('1001');
     await expect(c98Token.connect(owner).burn(amount))
-      .to.be.revertedWith('TRC25: insuffient balance');
+      .to.be.revertedWith('VRC25: insuffient balance');
   });
 
   it('should transfer tokens', async function() {
@@ -106,14 +106,14 @@ describe('SampleVRC25 token', async function() {
     await c98Token.connect(owner).mint(senderAddress, hhe.ethers.utils.parseEther('1000'));
     const amount = hhe.ethers.utils.parseEther('1001');
     await expect(c98Token.connect(sender).transfer(recipientAddress, amount))
-      .to.be.revertedWith('TRC25: insuffient balance');
+      .to.be.revertedWith('VRC25: insuffient balance');
   });
 
   it('cannot transfer to the zero address', async function() {
     await c98Token.connect(owner).mint(senderAddress, hhe.ethers.utils.parseEther('1000'));
     const transferAmount = hhe.ethers.utils.parseEther('500');
     await expect(c98Token.connect(sender).transfer(ZERO_ADDRESS, transferAmount))
-      .to.be.revertedWith('TRC25: transfer to the zero address');
+      .to.be.revertedWith('VRC25: transfer to the zero address');
   });
 
   it('should approve tokens', async function() {
@@ -130,7 +130,7 @@ describe('SampleVRC25 token', async function() {
   it('cannot approve to the zero address', async function() {
     await c98Token.connect(owner).mint(senderAddress, hhe.ethers.utils.parseEther('1000'));
     await expect(c98Token.connect(owner).approve(ZERO_ADDRESS, '1'))
-      .to.be.revertedWith('TRC25: approve to the zero address');
+      .to.be.revertedWith('VRC25: approve to the zero address');
   });
 
   it('should transferFrom successful', async function() {
@@ -168,7 +168,7 @@ describe('SampleVRC25 token', async function() {
     const deadline =  BigNumber.from(Math.floor(new Date().getTime() / 1000) + 3600);
     const permit = await createPermit(c98Token, sender, ZERO_ADDRESS, amount, deadline);
     await expect(c98Token.connect(sender).permit(senderAddress, ZERO_ADDRESS, amount, deadline, permit.v, permit.r, permit.s))
-      .to.be.revertedWith('TRC25: approve to the zero address');
+      .to.be.revertedWith('VRC25: approve to the zero address');
   });
 
   it('cannot permit to the wrong address', async function() {
@@ -177,7 +177,7 @@ describe('SampleVRC25 token', async function() {
     const deadline =  BigNumber.from(Math.floor(new Date().getTime() / 1000) + 3600);
     const permit = await createPermit(c98Token, sender, recipientAddress, amount, deadline);
     await expect(c98Token.connect(sender).permit(senderAddress, ownerAddress, amount, deadline, permit.v, permit.r, permit.s))
-      .to.be.revertedWith('TRC25: Invalid permit');
+      .to.be.revertedWith('VRC25: Invalid permit');
   });
 
   it('cannot permit with wrong amount', async function() {
@@ -185,7 +185,7 @@ describe('SampleVRC25 token', async function() {
     const deadline =  BigNumber.from(Math.floor(new Date().getTime() / 1000) + 3600);
     const permit = await createPermit(c98Token, sender, recipientAddress, hhe.ethers.utils.parseEther('1000'), deadline);
     await expect(c98Token.connect(sender).permit(senderAddress, ownerAddress, hhe.ethers.utils.parseEther('1001'), deadline, permit.v, permit.r, permit.s))
-      .to.be.revertedWith('TRC25: Invalid permit');
+      .to.be.revertedWith('VRC25: Invalid permit');
   });
 
   it('cannot permit expired permit', async function() {
@@ -195,10 +195,10 @@ describe('SampleVRC25 token', async function() {
     const permit = await createPermit(c98Token, sender, recipientAddress, amount, deadline);
     await time.increase(3700);
     await expect(c98Token.connect(sender).permit(senderAddress, ownerAddress, amount, deadline, permit.v, permit.r, permit.s))
-      .to.be.revertedWith('TRC25: Permit expired');
+      .to.be.revertedWith('VRC25: Permit expired');
   });
 
-  it('should not take fee if caller of Coin98VRC25 is contract', async function() {
+  it('should not take fee if caller of SampleVRC25 is contract', async function() {
     const testTransferHelperFactory = await hhe.ethers.getContractFactory("TestTransferHelper")
     const testTransferHelper = await testTransferHelperFactory.deploy(c98Token.address);
 
@@ -224,13 +224,13 @@ describe('SampleVRC25 token', async function() {
   });
 });
 
-async function createPermit(token: SampleTRC25, owner: Signer, spenderAddress: string, amount: BigNumber, deadline: BigNumber): Promise<ECDSASignature> {
+async function createPermit(token: SampleVRC25, owner: Signer, spenderAddress: string, amount: BigNumber, deadline: BigNumber): Promise<ECDSASignature> {
   const ownerAddress = await owner.getAddress();
   const nonce = await token.nonces(ownerAddress);
   const chainId = await hhe.ethers.provider.send('eth_chainId', []);
 
   const domain: EIP712Domain = {
-    name: "TRC25Permit",
+    name: "VRC25Permit",
     version: "1",
     chainId: chainId,
     verifyingContract: token.address,

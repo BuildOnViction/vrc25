@@ -4,7 +4,7 @@ pragma solidity >=0.6.0;
 /**
  * @dev Interface of the VRC25 standard as defined in the EIP.
  */
-interface ITRC25 {
+interface IVRC25 {
     /**
      * @notice Emitted when `value` tokens are moved from one account (`from`) to
      * another (`to`).

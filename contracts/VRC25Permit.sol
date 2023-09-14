@@ -1,14 +1,14 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.6.2;
 
-import "./interfaces/ITRC25Permit.sol";
+import "./interfaces/IVRC25Permit.sol";
 
 import "./libraries/ECDSA.sol";
 import "./libraries/EIP712.sol";
 
-import "./TRC25.sol";
+import "./VRC25.sol";
 
-abstract contract TRC25Permit is TRC25, EIP712, ITRC25Permit {
+abstract contract VRC25Permit is VRC25, EIP712, IVRC25Permit {
     bytes32 private constant PERMIT_TYPEHASH = keccak256("Permit(address owner,address spender,uint256 value,uint256 nonce,uint256 deadline)");
 
     mapping(address => uint256) private _nonces;
@@ -24,7 +24,7 @@ abstract contract TRC25Permit is TRC25, EIP712, ITRC25Permit {
     /**
      * @dev Returns an the next unused nonce for an address.
      */
-    function nonces(address owner) public view virtual override(ITRC25Permit) returns (uint256) {
+    function nonces(address owner) public view virtual override(IVRC25Permit) returns (uint256) {
         return _nonces[owner];
     }
 
@@ -32,12 +32,12 @@ abstract contract TRC25Permit is TRC25, EIP712, ITRC25Permit {
      * @dev See {IERC20Permit-permit}.
      */
     function permit(address owner, address spender, uint256 value, uint256 deadline, uint8 v, bytes32 r, bytes32 s) external override {
-        require(block.timestamp <= deadline, "TRC25: Permit expired");
+        require(block.timestamp <= deadline, "VRC25: Permit expired");
 
         bytes32 structHash = keccak256(abi.encode(PERMIT_TYPEHASH, owner, spender, value, _useNonce(owner), deadline));
         bytes32 hash = _hashTypedDataV4(structHash);
         address signer = ECDSA.recover(hash, v, r, s);
-        require(signer == owner, "TRC25: Invalid permit");
+        require(signer == owner, "VRC25: Invalid permit");
 
         uint256 fee = estimateFee(0);
         _approve(owner, spender, value);

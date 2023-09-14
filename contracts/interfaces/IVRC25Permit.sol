@@ -10,7 +10,7 @@ pragma solidity >=0.6.0;
  * presenting a message signed by the account. By not relying on {IERC20-approve}, the token holder account doesn't
  * need to send a transaction, and thus is not required to hold Ether at all.
  */
-interface ITRC25Permit {
+interface IVRC25Permit {
     /**
      * @dev Returns the domain separator used in the encoding of the signature for {permit}, as defined by {EIP712}.
      */

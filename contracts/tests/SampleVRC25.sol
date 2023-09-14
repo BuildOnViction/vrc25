@@ -1,13 +1,13 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.6.2;
 
-import "../TRC25Permit.sol";
+import "../VRC25Permit.sol";
 
-contract SampleTRC25 is TRC25Permit {
+contract SampleVRC25 is VRC25Permit {
     using Address for address;
     event Hello(address sender);
 
-    constructor() public TRC25("Example Fungible Token", "EFT", 0) EIP712("TRC25Permit", "1") {
+    constructor() public VRC25("Example Fungible Token", "EFT", 0) EIP712("VRC25Permit", "1") {
     }
 
     /**
@@ -25,7 +25,7 @@ contract SampleTRC25 is TRC25Permit {
     }
 
     function supportsInterface(bytes4 interfaceId) public view override returns (bool) {
-        return interfaceId == type(ITRC25).interfaceId || super.supportsInterface(interfaceId);
+        return interfaceId == type(IVRC25).interfaceId || super.supportsInterface(interfaceId);
     }
 
     /**

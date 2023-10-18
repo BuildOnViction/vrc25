@@ -3,9 +3,10 @@ import hhe from 'hardhat';
 import { Signer, BigNumber } from 'ethers';
 import { expect } from 'chai';
 import { SampleVRC25 } from '../typechain-types';
-import { ZERO_ADDRESS } from '@coin98/solidity-support-library';
 import { ECDSASignature, EIP712Domain, EIP712TypeDefinition } from './EIP712';
 import { time } from '@nomicfoundation/hardhat-network-helpers';
+
+const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000';
 
 describe('SampleVRC25 token', async function() {
   let owner: Signer;

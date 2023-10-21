@@ -25,11 +25,6 @@ interface IVRC25 {
     event Fee(address indexed from, address indexed to, address indexed issuer, uint256 value);
 
     /**
-     * Same address as owner of the token
-     */
-    function issuer() external view returns (address);
-
-    /**
      * @notice Returns the number of decimals used to get its user representation.
      * For example, if `decimals` equals `2`, a balance of `505` tokens should
      * be displayed to a user as `5,05` (`505 / 10 ** 2`).
@@ -53,6 +48,11 @@ interface IVRC25 {
      * @notice Returns the amount of tokens owned by `account`.
      */
     function balanceOf(address who) external view returns (uint256);
+
+    /**
+     * Same address as owner of the token
+     */
+    function issuer() external view returns (address);
 
     /**
      * @notice Returns the remaining number of tokens that `spender` will be

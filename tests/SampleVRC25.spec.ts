@@ -231,7 +231,7 @@ async function createPermit(token: SampleVRC25, owner: Signer, spenderAddress: s
   const chainId = await hhe.ethers.provider.send('eth_chainId', []);
 
   const domain: EIP712Domain = {
-    name: "VRC25Permit",
+    name: "VRC25",
     version: "1",
     chainId: chainId,
     verifyingContract: token.address,

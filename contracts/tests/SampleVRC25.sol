@@ -15,7 +15,7 @@ contract SampleVRC25 is VRC25Permit {
      * @param value Amount of fee
      */
     function _estimateFee(uint256 value) internal view override returns (uint256) {
-        return value + minFee();
+        return minFee();
     }
 
     function sayHello() public {

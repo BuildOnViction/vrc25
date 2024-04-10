@@ -1,7 +1,6 @@
 import '@nomicfoundation/hardhat-toolbox';
 import dotenv from 'dotenv';
 import 'hardhat-dependency-compiler';
-import 'hardhat-deploy';
 import 'hardhat-gas-reporter';
 import { HardhatUserConfig } from 'hardhat/config';
 
@@ -85,7 +84,6 @@ const config: HardhatUserConfig = {
   paths: {
     artifacts: './artifacts',
     cache: './cache',
-    deploy: './deploy',
     sources: './contracts',
     tests: './tests',
   },

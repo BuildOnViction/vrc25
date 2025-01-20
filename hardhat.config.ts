@@ -1,7 +1,6 @@
-import '@nomicfoundation/hardhat-toolbox';
 import dotenv from 'dotenv';
+import '@nomicfoundation/hardhat-toolbox';
 import 'hardhat-dependency-compiler';
-import 'hardhat-gas-reporter';
 import { HardhatUserConfig } from 'hardhat/config';
 
 dotenv.config();
@@ -32,6 +31,10 @@ const config: HardhatUserConfig = {
         },
       },
     ],
+  },
+  typechain: {
+    outDir: './typechain-types',
+    target: 'ethers-v5',
   },
   networks: {
     hardhat: {
@@ -98,7 +101,7 @@ const config: HardhatUserConfig = {
     token: 'ETH',
   },
   mocha: {
-    timeout: 60000
+    timeout: 60000,
   }
 };
 

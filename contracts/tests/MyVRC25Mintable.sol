@@ -3,7 +3,7 @@
 
 
 
-pragma solidity >=0.6.2;
+pragma solidity >=0.7.6;
 
 // Sources flattened with hardhat v2.12.6 https://hardhat.org
 
@@ -1150,7 +1150,7 @@ abstract contract VRC25Permit is VRC25, EIP712, IVRC25Permit {
 // File: contracts/MyVRC25Mintable.sol
 
 
-pragma solidity >=0.6.2;
+pragma solidity >=0.7.6;
 
 
 contract MyVRC25Mintable is VRC25Permit {

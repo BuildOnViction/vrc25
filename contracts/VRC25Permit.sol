@@ -13,7 +13,7 @@ abstract contract VRC25Permit is VRC25, EIP712, IVRC25Permit {
 
     mapping(address => uint256) private _nonces;
 
-    constructor() public EIP712("VRC25", "1") { }
+    constructor() EIP712("VRC25", "1") { }
 
     /**
      * @dev See {IERC20Permit-DOMAIN_SEPARATOR}.

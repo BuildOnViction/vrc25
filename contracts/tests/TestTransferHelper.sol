@@ -6,7 +6,7 @@ import "./SampleVRC25.sol";
 contract TestTransferHelper {
     address private _token;
 
-    constructor(address token) public {
+    constructor(address token) {
         _token = token;
     }
 

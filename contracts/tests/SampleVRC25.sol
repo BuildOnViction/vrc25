@@ -7,7 +7,7 @@ contract SampleVRC25 is VRC25Permit {
     using Address for address;
     event Hello(address sender);
 
-    constructor() public VRC25("Example Fungible Token", "EFT", 0) {
+    constructor() VRC25("Example Fungible Token", "EFT", 0) {
     }
 
     /**

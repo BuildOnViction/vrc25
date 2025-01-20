@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity >=0.6.2;
+pragma solidity >=0.7.6;
 
 import "../VRC25Permit.sol";
 
@@ -7,7 +7,7 @@ contract SampleVRC25 is VRC25Permit {
     using Address for address;
     event Hello(address sender);
 
-    constructor() public VRC25("Example Fungible Token", "EFT", 0) {
+    constructor() VRC25("Example Fungible Token", "EFT", 0) {
     }
 
     /**

@@ -1,12 +1,12 @@
 // SPDX-License-Identifier: MIT
-pragma solidity >=0.6.2;
+pragma solidity >=0.7.6;
 
 import "./SampleVRC25.sol";
 
 contract TestTransferHelper {
     address private _token;
 
-    constructor(address token) public {
+    constructor(address token) {
         _token = token;
     }
 

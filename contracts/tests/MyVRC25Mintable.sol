@@ -3,7 +3,7 @@
 
 
 
-pragma solidity >=0.6.2;
+pragma solidity >=0.7.6;
 
 // Sources flattened with hardhat v2.12.6 https://hardhat.org
 
@@ -567,7 +567,7 @@ abstract contract VRC25 is IVRC25, IERC165 {
     event FeeUpdated(uint256 fee);
     event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);
 
-    constructor(string memory name, string memory symbol, uint8 decimals_) internal {
+    constructor(string memory name, string memory symbol, uint8 decimals_) {
         _name = name;
         _symbol = symbol;
         _decimals = decimals_;
@@ -1038,7 +1038,7 @@ abstract contract EIP712 {
      * NOTE: These parameters cannot be changed except through a xref:learn::upgrading-smart-contracts.adoc[smart
      * contract upgrade].
      */
-    constructor(string memory name, string memory version) internal {
+    constructor(string memory name, string memory version) {
         bytes32 hashedName = keccak256(bytes(name));
         bytes32 hashedVersion = keccak256(bytes(version));
         bytes32 typeHash = keccak256("EIP712Domain(string name,string version,uint256 chainId,address verifyingContract)");
@@ -1101,7 +1101,7 @@ abstract contract VRC25Permit is VRC25, EIP712, IVRC25Permit {
 
     mapping(address => uint256) private _nonces;
 
-    constructor() public EIP712("VRC25", "1") { }
+    constructor() EIP712("VRC25", "1") { }
 
     /**
      * @dev See {IERC20Permit-DOMAIN_SEPARATOR}.
@@ -1150,13 +1150,13 @@ abstract contract VRC25Permit is VRC25, EIP712, IVRC25Permit {
 // File: contracts/MyVRC25Mintable.sol
 
 
-pragma solidity >=0.6.2;
+pragma solidity >=0.7.6;
 
 
 contract MyVRC25Mintable is VRC25Permit {
     using Address for address;
 
-    constructor(string memory _name, string memory _symbol, uint8 _decimals, uint256 _initialSupply) public VRC25(_name, _symbol, _decimals) {
+    constructor(string memory _name, string memory _symbol, uint8 _decimals, uint256 _initialSupply) VRC25(_name, _symbol, _decimals) {
         _mint(msg.sender, _initialSupply);
     }
 

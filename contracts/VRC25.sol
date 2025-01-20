@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity >=0.6.2;
+pragma solidity >=0.7.6;
 
 import "./interfaces/IVRC25.sol";
 import "./interfaces/IERC165.sol";
@@ -31,7 +31,7 @@ abstract contract VRC25 is IVRC25, IERC165 {
     event FeeUpdated(uint256 fee);
     event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);
 
-    constructor(string memory name, string memory symbol, uint8 decimals_) internal {
+    constructor(string memory name, string memory symbol, uint8 decimals_) {
         _name = name;
         _symbol = symbol;
         _decimals = decimals_;

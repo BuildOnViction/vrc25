@@ -1,7 +1,4 @@
 # Coin98 EditorConfig v1.0.0
-# To learn more about .editorconfig see https://aka.ms/editorconfigdocs
-
-# top-most EditorConfig file
 root = true
 
 ## ALL FILES

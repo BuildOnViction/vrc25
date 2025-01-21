@@ -1,5 +1,6 @@
-// SPDX-License-Identifier: SEE LICENSE IN LICENSE
-pragma solidity >=0.7.6;
+// SPDX-License-Identifier: MIT
+
+pragma solidity >=0.6.0;
 /**
  * @dev Interface of the VRC25 standard as defined in the EIP.
  */

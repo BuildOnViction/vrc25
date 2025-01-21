@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: MIT
 
-pragma solidity >=0.6.0;
-
+pragma solidity >=0.7.6;
 /**
  * @dev Interface of the ERC20 Permit extension allowing approvals to be made via signatures, as defined in
  * https://eips.ethereum.org/EIPS/eip-2612[EIP-2612].
